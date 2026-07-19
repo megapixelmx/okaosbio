@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKAOs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700;900&display=swap" rel="stylesheet">
+    <link class="okaos-logo-ref" rel="icon" type="image/jpg" href="img/logo.jpg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        img {
+            pointer-events: none;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background: #000000;
+            width: 100vw;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+        }
+        .hero-section {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4% 6%;
+            position: relative;
+            background: url('img/fn/f1.gif') no-repeat center center/cover;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.1) 100%);
+            z-index: 1;
+        }
+        .main-layout {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .logo-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 40%;
+            opacity: 0;
+            transform: translateY(-150px);
+            animation: logoEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0px 8px 20px rgba(0,0,0,0.7));
+        }
+        .menu-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .menu-title-main {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0px rgba(0,0,0,0.8);
+            margin-left: 35px;
+            letter-spacing: 3px;
+            width: fit-content;
+            opacity: 0;
+            transform: rotate(-4deg) translateX(-100px);
+            animation: titleEntrance 0.5s ease-out forwards;
+        }
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transform: rotate(-4deg);
+            align-items: flex-start;
+        }
+        .menu-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #ffffff;
+            background: #141414;
+            border: 5px solid #ffffff;
+            transform: skewX(-16deg);
+            box-shadow: -8px 8px 0px rgba(0, 0, 0, 0.8);
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: skewX(-16deg) translateX(-200px);
+        }
+        .btn span {
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            transform: skewX(16deg);
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+        .btn-jugar {
+            width: 440px;
+            height: 95px;
+            font-size: 3.2rem;
+        }
+        .btn-inicio {
+            width: 200px;
+            height: 80px;
+            font-size: 1.8rem;
+        }
+        .btn-download {
+            width: 240px;
+            height: 80px;
+            font-size: 1.8rem;
+        }
+        .btn-sobre {
+            width: 360px;
+            height: 75px;
+            font-size: 1.7rem;
+            margin-left: 15px;
+        }
+        .btn-jugar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: skewX(16deg);
+        }
+        .btn-jugar.shine-active::after {
+            animation: shine 10s infinite ease-in-out;
+        }
+        .btn-jugar:hover::after {
+            animation: none;
+            opacity: 0;
+        }
+        @keyframes shine {
+            0% { left: -150%; }
+            10% { left: 150%; }
+            100% { left: 150%; }
+        }
+        .btn:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: skewX(-16deg) scale(1.04) translate(4px, -4px);
+            box-shadow: -12px 12px 0px rgba(0, 0, 0, 0.9);
+        }
+        .btn:hover span {
+            text-shadow: none;
+        }
+        .btn.entrance-active {
+            opacity: 1;
+            transform: skewX(-16deg) translateX(0);
+            transition: opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn.bounce-active {
+            animation: smoothBounce 0.4s ease-out;
+        }
+        @keyframes smoothBounce {
+            0% { transform: skewX(-16deg) scale(1); }
+            50% { transform: skewX(-16deg) scale(1.06); }
+            100% { transform: skewX(-16deg) scale(1); }
+        }
+        @keyframes logoEntrance {
+            0% { opacity: 0; transform: translateY(-150px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes titleEntrance {
+            0% { opacity: 0; transform: rotate(-4deg) translateX(-100px); }
+            100% { opacity: 1; transform: rotate(-4deg) translateX(0); }
+        }
+        .separator-line {
+            width: 100vw;
+            height: 0px;
+            position: relative;
+            z-index: 10;
+        }
+        .diamonds-container {
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        .diamond-btn {
+            width: 60px;
+            height: 60px;
+            background: #141414;
+            border: 4px solid #ffffff;
+            transform: rotate(45deg) scale(0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: -4px 4px 0px rgba(0,0,0,0.8);
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+            opacity: 0;
+        }
+        .diamond-btn svg {
+            transform: rotate(-45deg);
+            width: 26px;
+            height: 26px;
+            fill: #ffffff;
+            transition: fill 0.2s;
+        }
+        .diamond-btn-highlight {
+            width: 76px;
+            height: 76px;
+            border-width: 5px;
+        }
+        .diamond-btn-highlight svg {
+            width: 34px;
+            height: 34px;
+        }
+        .diamond-btn:hover {
+            background: #ffffff;
+            transform: rotate(45deg) scale(1.15);
+        }
+        .diamond-btn-highlight:hover {
+            transform: rotate(45deg) scale(1.1);
+        }
+        .diamond-btn:hover svg {
+            fill: #141414;
+        }
+        .diamond-btn.scroll-show {
+            opacity: 1;
+            transform: rotate(45deg) scale(1);
+        }
+        .content-section {
+            width: 100vw;
+            padding: 140px 6% 60px 6%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .balloon-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .balloon-card {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
+            border: 3px solid #ffffff;
+            padding: 30px 40px;
+            position: relative;
+            max-width: 80%;
+            width: 100%;
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        .balloon-card.balloon-left {
+            align-self: flex-start;
+            transform: translateX(-150px) skewX(-8deg);
+            border-left: 8px solid #ffffff;
+            box-shadow: -12px 12px 0px rgba(255, 255, 255, 0.05);
+        }
+        .balloon-card.balloon-right {
+            align-self: flex-end;
+            transform: translateX(150px) skewX(8deg);
+            flex-direction: row-reverse;
+            border-right: 8px solid #ffffff;
+            box-shadow: 12px 12px 0px rgba(255, 255, 255, 0.05);
+        }
+        .balloon-card::before {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            width: 0;
+            height: 0;
+            border: 14px solid transparent;
+            z-index: 2;
+        }
+        .balloon-card::after {
+            content: '';
+            position: absolute;
+            bottom: 18px;
+            width: 0;
+            height: 0;
+            border: 16px solid transparent;
+            z-index: 1;
+        }
+        .balloon-left::before {
+            left: -28px;
+            border-right-color: #141414;
+            transform: skewX(8deg);
+        }
+        .balloon-left::after {
+            left: -35px;
+            border-right-color: #ffffff;
+            transform: skewX(8deg);
+        }
+        .balloon-right::before {
+            right: -28px;
+            border-left-color: #101010;
+            transform: skewX(-8deg);
+        }
+        .balloon-right::after {
+            right: -35px;
+            border-left-color: #ffffff;
+            transform: skewX(-8deg);
+        }
+        .balloon-card.scroll-show.balloon-left {
+            opacity: 1;
+            transform: translateX(0) skewX(-8deg);
+        }
+        .balloon-card.scroll-show.balloon-right {
+            opacity: 1;
+            transform: translateX(0) skewX(8deg);
+        }
+        .balloon-card:hover {
+            border-color: #ffffff;
+            box-shadow: 0px 0px 25px rgba(255, 255, 255, 0.2);
+        }
+        .balloon-icon-wrapper {
+            flex-shrink: 0;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.3));
+            transition: transform 0.3s ease;
+        }
+        .balloon-card:hover .balloon-icon-wrapper {
+            transform: scale(1.1);
+        }
+        .balloon-left .balloon-icon-wrapper {
+            transform: skewX(8deg);
+        }
+        .balloon-right .balloon-icon-wrapper {
+            transform: skewX(-8deg);
+        }
+        .balloon-left:hover .balloon-icon-wrapper {
+            transform: skewX(8deg) scale(1.1);
+        }
+        .balloon-right:hover .balloon-icon-wrapper {
+            transform: skewX(-8deg) scale(1.1);
+        }
+        .balloon-icon-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .balloon-text-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+        .balloon-left .balloon-text-content {
+            transform: skewX(8deg);
+        }
+        .balloon-right .balloon-text-content {
+            transform: skewX(-8deg);
+        }
+        .card-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .card-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.6), transparent);
+        }
+        .balloon-right .card-title::after {
+            background: linear-gradient(270deg, rgba(255,255,255,0.6), transparent);
+            flex-direction: row-reverse;
+        }
+        .card-text {
+            color: #e0e0e0;
+            font-size: 1rem;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+        .card-text strong {
+            color: #ffffff;
+            font-weight: 900;
+        }
+        .centered-tag-section {
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+            position: relative;
+            z-index: 2;
+        }
+        .centered-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
+            border: 4px solid #ffffff;
+            padding: 20px 50px;
+            box-shadow: -10px 10px 0px rgba(0, 0, 0, 0.8), 0px 0px 25px rgba(255, 255, 255, 0.1);
+            transform: skewX(-8deg);
+            position: relative;
+        }
+        .centered-tag::before {
+            content: '';
+            position: absolute;
+            bottom: 15px;
+            left: -24px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: #ffffff;
+            transform: skewX(8deg);
+            z-index: 1;
+        }
+        .centered-tag::after {
+            content: '';
+            position: absolute;
+            bottom: 16px;
+            left: -18px;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-right-color: #141414;
+            transform: skewX(8deg);
+            z-index: 2;
+        }
+        .centered-tag img {
+            width: 65px;
+            height: 65px;
+            object-fit: contain;
+            transform: skewX(8deg);
+            filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.4));
+        }
+        .centered-tag span {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transform: skewX(8deg);
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.6);
+        }
+        .game-section {
+            width: 100vw;
+            padding: 40px 6% 140px 6%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .game-images-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            max-width: 900px;
+            width: 100%;
+        }
+        .game-showcase-img {
+            max-width: 70%;
+            width: 100%;
+            height: auto;
+            border: 5px solid #ffffff;
+            box-shadow: 0px 0px 25px rgba(255, 255, 255, 0.15);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease-out;
+        }
+        .game-img-left {
+            align-self: flex-start;
+            transform: translateX(-150px) skewX(-4deg);
+        }
+        .game-img-right {
+            align-self: flex-end;
+            transform: translateX(150px) skewX(4deg);
+        }
+        .game-showcase-img.scroll-show.game-img-left {
+            opacity: 1;
+            transform: translateX(0) skewX(-4deg);
+        }
+        .game-showcase-img.scroll-show.game-img-right {
+            opacity: 1;
+            transform: translateX(0) skewX(4deg);
+        }
+        .custom-notification {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #141414;
+            border: 4px solid #ffffff;
+            padding: 16px 32px;
+            color: #ffffff;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.7), 0px 0px 15px rgba(255,255,255,0.2);
+            z-index: 9999;
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+            opacity: 0;
+            white-space: nowrap;
+        }
+        .custom-notification.show-notif {
+            bottom: 40px;
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 30px 20px;
+                height: auto;
+                min-height: 100vh;
+                justify-content: center;
+            }
+            .main-layout {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 40px;
+            }
+            .logo-container {
+                position: relative;
+                max-width: 80%;
+                top: auto;
+                right: auto;
+                transform: translateY(-50px);
+                margin: 0 auto;
+            }
+            .menu-wrapper {
+                width: 100%;
+                align-items: center;
+            }
+            .menu-title-main {
+                margin-left: 0;
+                font-size: 2rem;
+                text-align: center;
+            }
+            .menu-container {
+                width: 100%;
+                align-items: center;
+                transform: rotate(0deg);
+            }
+            .menu-row {
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+            }
+            .btn {
+                transform: skewX(0deg) translateX(-200px);
+                width: 100% !important;
+                max-width: 340px;
+                height: 70px !important;
+                font-size: 1.6rem !important;
+                box-shadow: -6px 6px 0px rgba(0, 0, 0, 0.8);
+            }
+            .btn-jugar {
+                font-size: 2rem !important;
+                height: 80px !important;
+            }
+            .btn span {
+                transform: skewX(0deg);
+            }
+            .btn:hover {
+                transform: skewX(0deg) scale(1.02) translate(2px, -2px);
+            }
+            .btn.entrance-active {
+                transform: skewX(0deg) translateX(0);
+            }
+            @keyframes titleEntrance {
+                0% { opacity: 0; transform: rotate(0deg) translateX(-50px); }
+                100% { opacity: 1; transform: rotate(0deg) translateX(0); }
+            }
+            .btn-jugar::after {
+                transform: skewX(0deg);
+            }
+            .diamonds-container {
+                gap: 15px;
+                width: 90vw;
+                justify-content: center;
+            }
+            .diamond-btn {
+                width: 50px;
+                height: 50px;
+            }
+            .diamond-btn-highlight {
+                width: 64px;
+                height: 64px;
+            }
+            .content-section {
+                padding: 100px 20px 40px 20px;
+            }
+            .balloon-card {
+                max-width: 100%;
+                padding: 20px;
+                flex-direction: column !important;
+                gap: 20px;
+                text-align: center;
+            }
+            .balloon-card.balloon-left {
+                transform: translateX(-100px) skewX(0deg);
+                border-left: 5px solid #ffffff;
+            }
+            .balloon-card.balloon-right {
+                transform: translateX(100px) skewX(0deg);
+                border-right: 5px solid #ffffff;
+            }
+            .balloon-card::before, .balloon-card::after {
+                display: none;
+            }
+            .balloon-card.scroll-show.balloon-left,
+            .balloon-card.scroll-show.balloon-right {
+                transform: translateX(0) skewX(0deg);
+            }
+            .balloon-icon-wrapper {
+                transform: skewX(0deg) !important;
+            }
+            .balloon-text-content {
+                transform: skewX(0deg) !important;
+            }
+            .card-title {
+                justify-content: center;
+                font-size: 1.5rem;
+            }
+            .card-title::after {
+                display: none;
+            }
+            .centered-tag {
+                padding: 15px 35px;
+                transform: skewX(0deg);
+            }
+            .centered-tag::before, .centered-tag::after {
+                display: none;
+            }
+            .centered-tag img, .centered-tag span {
+                transform: skewX(0deg);
+            }
+            .centered-tag span {
+                font-size: 2rem;
+            }
+            .game-section {
+                padding: 20px 20px 80px 20px;
+            }
+            .game-showcase-img {
+                max-width: 100%;
+            }
+            .game-img-left {
+                transform: translateX(-100px) skewX(0deg);
+            }
+            .game-img-right {
+                transform: translateX(100px) skewX(0deg);
+            }
+            .game-showcase-img.scroll-show.game-img-left,
+            .game-showcase-img.scroll-show.game-img-right {
+                transform: translateX(0) skewX(0deg);
+            }
+            .custom-notification {
+                font-size: 1rem;
+                padding: 12px 24px;
+                width: 90%;
+                text-align: center;
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="custom-notification" id="downloadNotif">No está disponible esta opción</div>
+
+    <section class="hero-section">
+        <div class="main-layout">
+            <div class="logo-container">
+                <img src="img/logo.png" alt="OKAOs">
+            </div>
+
+            <div class="menu-wrapper">
+                <div class="menu-title-main">Opciones</div>
+                
+                <div class="menu-container">
+                    <a href="http://www.okaos.nx.kg" class="btn btn-jugar" id="btnJugar">
+                        <span>Jugar</span>
+                    </a>
+                    
+                    <div class="menu-row">
+                        <a href="/" class="btn btn-inicio" id="btnInicio">
+                            <span>Inicio</span>
+                        </a>
+                        <a href="#" class="btn btn-download" id="btnDownload">
+                            <span>Download</span>
+                        </a>
+                    </div>
+                    
+                    <a href="sc/okaos" class="btn btn-sobre" id="btnSobre">
+                        <span>Sobre OKAOs</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="separator-line">
+        <div class="diamonds-container">
+            <a href="#" class="diamond-btn" id="d1">
+                <svg viewBox="0 0 127.14 96.36">
+                    <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.4-5c.87-.64,1.71-1.32,2.51-2a75.48,75.48,0,0,0,92.59,0c.8.71,1.64,1.39,2.51,2a68.43,68.43,0,0,1-10.4,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129,54.65,123.48,31.58,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.88,46,53.88,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.12,46,96.12,53,91,65.69,84.69,65.69Z"/>
+                </svg>
+            </a>
+            <a href="#" class="diamond-btn" id="d2">
+                <svg viewBox="0 0 448 512">
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a72.43,72.43,0,1,0,40.23,65V0h90.12a121.5,121.5,0,0,0,38.56,86.64A120.4,120.4,0,0,0,448,120.78Z"/>
+                </svg>
+            </a>
+            <a href="http://www.okaos.nx.kg" class="diamond-btn diamond-btn-highlight" id="d3">
+                <svg viewBox="0 0 448 512">
+                    <path d="M424.4,214.7L72.4,6.6C43.8-10.3,0,6.1,0,47.9V464c0,42.4,43.8,58.2,72.4,41.3l352-208.1C455.8,278.2,455.8,233.8,424.4,214.7Z"/>
+                </svg>
+            </a>
+            <a href="#" class="diamond-btn" id="d4">
+                <svg viewBox="0 0 384 512">
+                    <path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H256c-17.7 0-32-14.3-32-32zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm96-136L248 0v128c0 8.8 7.2 16 16 16h120z"/>
+                </svg>
+            </a>
+            <a href="#" class="diamond-btn" id="d5">
+                <svg viewBox="0 0 192 512">
+                    <path d="M20 424.228h20V279.772H20c-11.046 0-20-8.954-20-20V212c0-11.046 8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.228h20c11.046 0 20 8.954 20 20V492c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20v-47.772c0-11.046 8.954-20 20-20zM96 0C51.813 0 16 35.813 16 80s35.813 80 80 80 80-35.813 80-80S140.188 0 96 0z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <div class="balloon-layout">
+            <div class="balloon-card balloon-left">
+                <div class="balloon-icon-wrapper">
+                    <img src="img/icons/ic1.png" alt="Flechas">
+                </div>
+                <div class="balloon-text-content">
+                    <div class="card-title">Flechas</div>
+                    <div class="card-text">El manejo y diseño del juego se basa en flechas que aparecerán al ritmo de la canción. Cuenta con 4 filas donde irán apareciendo, y las tablas se pueden cambiar y adaptar según tu propia preferencia.</div>
+                </div>
+            </div>
+            <div class="balloon-card balloon-right">
+                <div class="balloon-icon-wrapper">
+                    <img src="img/icons/ic2.png" alt="Dificultad">
+                </div>
+                <div class="balloon-text-content">
+                    <div class="card-title">Dificultad</div>
+                    <div class="card-text">Los desafíos varían completamente según el mapa de cada canción elegida. Podrás poner a prueba tus reflejos seleccionando entre los niveles Easy, Medium, Hard e Impossible.</div>
+                </div>
+            </div>
+            <div class="balloon-card balloon-left">
+                <div class="balloon-icon-wrapper">
+                    <img src="img/icons/ic3.png" alt="Vidas">
+                </div>
+                <div class="balloon-text-content">
+                    <div class="card-title">Vidas</div>
+                    <div class="card-text">El modo de juego de <strong>OKAOs</strong> tiene 3 vidas iniciales que se irán descontando según los fallos que tenga el jugador. También incluye 2 modos adicionales para elegir según tu preferencia: el de recuperación (donde puedes recuperar vida o perderla) y la modalidad sin vidas.</div>
+                </div>
+            </div>
+            <div class="balloon-card balloon-right">
+                <div class="balloon-icon-wrapper">
+                    <img src="img/icons/ic4.png" alt="Comunidad">
+                </div>
+                <div class="balloon-text-content">
+                    <div class="card-title">Comunidad</div>
+                    <div class="card-text">Los mapas de las canciones que aparecen en el juego serán hechos por la comunidad. En esta Demo se incluyen mapas específicos para que pruebes la experiencia, pero cuando salga una beta oficial los jugadores podrán crear sus propios mapas e incluso mods.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="centered-tag-section">
+        <div class="centered-tag">
+            <img src="img/icons/ic5.png" alt="Icono Juego">
+            <span>Juego</span>
+        </div>
+    </div>
+
+    <section class="game-section">
+        <div class="game-images-layout">
+            <img src="img/ft/ft1.jpg" alt="Juego 1" class="game-showcase-img game-img-left">
+            <img src="img/ft/ft2.jpg" alt="Juego 2" class="game-showcase-img game-img-right">
+            <img src="img/ft/ft3.jpg" alt="Juego 3" class="game-showcase-img game-img-left">
+        </div>
+    </section>
+
+    <script>
+        let notifTimeout;
+        document.getElementById('btnDownload').addEventListener('click', (e) => {
+            e.preventDefault();
+            const notif = document.getElementById('downloadNotif');
+            notif.classList.add('show-notif');
+            clearTimeout(notifTimeout);
+            notifTimeout = setTimeout(() => {
+                notif.classList.remove('show-notif');
+            }, 3000);
+        });
+
+        function executeAnimations() {
+            const isMobile = window.innerWidth <= 768;
+            const sequence = [
+                document.getElementById('btnJugar'),
+                document.getElementById('btnInicio'),
+                document.getElementById('btnDownload'),
+                document.getElementById('btnSobre')
+            ];
+            
+            sequence.forEach((btn, index) => {
+                setTimeout(() => {
+                    if (btn) {
+                        btn.classList.add('entrance-active');
+                        
+                        setTimeout(() => {
+                            if (isMobile) {
+                                btn.style.transition = 'transform 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease';
+                            } else {
+                                btn.style.transition = 'transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease';
+                            }
+                            if (btn.id === 'btnJugar') {
+                                btn.classList.add('shine-active');
+                            }
+                            btn.classList.add('bounce-active');
+                            btn.addEventListener('animationend', () => {
+                                btn.classList.remove('bounce-active');
+                            }, { once: true });
+                        }, 400);
+                    }
+                }, index * 200);
+            });
+        }
+
+        function executeLoopBounce() {
+            const sequence = [
+                document.getElementById('btnJugar'),
+                document.getElementById('btnInicio'),
+                document.getElementById('btnDownload'),
+                document.getElementById('btnSobre')
+            ];
+            
+            sequence.forEach((btn, index) => {
+                setTimeout(() => {
+                    if (btn && btn.classList.contains('entrance-active')) {
+                        btn.classList.add('bounce-active');
+                        btn.addEventListener('animationend', () => {
+                            btn.classList.remove('bounce-active');
+                        }, { once: true });
+                    }
+                }, index * 200);
+            });
+        }
+
+        function handleScrollAnimations() {
+            const diamonds = document.querySelectorAll('.diamond-btn');
+            const cards = document.querySelectorAll('.balloon-card');
+            const gameImages = document.querySelectorAll('.game-showcase-img');
+            const separator = document.querySelector('.separator-line');
+            const separatorTop = separator.getBoundingClientRect().top;
+            const triggerPoint = window.innerHeight * 0.9;
+
+            if (separatorTop < triggerPoint) {
+                diamonds.forEach((diamond, index) => {
+                    setTimeout(() => {
+                        diamond.classList.add('scroll-show');
+                    }, index * 100);
+                });
+            }
+
+            cards.forEach((card) => {
+                const cardTop = card.getBoundingClientRect().top;
+                if (cardTop < triggerPoint) {
+                    card.classList.add('scroll-show');
+                }
+            });
+
+            gameImages.forEach((img) => {
+                const imgTop = img.getBoundingClientRect().top;
+                if (imgTop < triggerPoint) {
+                    img.classList.add('scroll-show');
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(executeAnimations, 300);
+            setInterval(executeLoopBounce, 60000);
+            window.addEventListener('scroll', handleScrollAnimations);
+            handleScrollAnimations();
+        });
+    </script>
+
+</body>
+</html>
